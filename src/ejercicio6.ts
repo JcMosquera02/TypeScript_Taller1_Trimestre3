@@ -10,19 +10,33 @@ interface Calificacion {
 type PromedioCategoria = Record<Categoria, number>
 
 function promedioPorCategoria(calificaciones: Calificacion[], estudianteId: number): PromedioCategoria {
-    const delEstudiante = calificaciones.filter(c => c.estudianteId === estudianteId)
+    const resultado: PromedioCategoria = {
+        tareas: 0,
+        quices: 0,
+        examen: 0
+    }
 
-    const categorias: Categoria[] = ["tareas", "quices", "examen"]
+    const conteo: Record<Categoria, number> = {
+        tareas: 0,
+        quices: 0,
+        examen: 0
+    }
 
-    return categorias.reduce<PromedioCategoria>((acc, categoria) => {
-        const notas = delEstudiante
-            .filter(c => c.categoria === categoria)
-            .map(c => c.nota)
+    for (const c of calificaciones) {
+        if (c.estudianteId === estudianteId) {
+            resultado[c.categoria] += c.nota
+            conteo[c.categoria]++
+        }
+    }
 
-        const promedio = notas.length === 0
-            ? 0
-            : notas.reduce((sum, n) => sum + n, 0) / notas.length
+    // calcular promedios
+    for (const categoria of ["tareas", "quices", "examen"] as Categoria[]) {
+        if (conteo[categoria] > 0) {
+            resultado[categoria] = resultado[categoria] / conteo[categoria]
+        } else {
+            resultado[categoria] = 0
+        }
+    }
 
-        return { ...acc, [categoria]: promedio }
-    }, { tareas: 0, quices: 0, examen: 0 })
+    return resultado
 }

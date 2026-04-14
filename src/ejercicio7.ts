@@ -1,17 +1,24 @@
-type Categoria = "alimentos" | "tecnología" | "papelería";
+type Categoria = "alimentos" | "tecnologia" | "papeleria"
 
 interface Producto {
-    id: number;
-    nombre: string;
-    cantidad: number;
-    categoria: Categoria;
+    id: number
+    nombre: string
+    cantidad: number
+    categoria: Categoria
 }
 
 function tieneBajoStock(producto: Producto): boolean {
-    const reglas: Record<Categoria, number> = {
-        alimentos: 20,
-        tecnología: 5,
-        papelería: 50
-    };
-    return producto.cantidad < reglas[producto.categoria];
+    if (producto.categoria === "alimentos") {
+        return producto.cantidad < 20
+    }
+
+    if (producto.categoria === "tecnologia") {
+        return producto.cantidad < 5
+    }
+
+    if (producto.categoria === "papeleria") {
+        return producto.cantidad < 50
+    }
+
+    return false
 }

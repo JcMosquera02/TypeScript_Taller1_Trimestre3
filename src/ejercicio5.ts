@@ -10,8 +10,15 @@ type CambioUsuario = {
 type ResumenCambios = Record<TipoCambio, number>
 
 function resumirCambios(cambios: CambioUsuario[]): ResumenCambios {
-    return cambios.reduce<ResumenCambios>(
-        (acc, cambio) => ({ ...acc, [cambio.tipo]: acc[cambio.tipo] + 1 }),
-        { nombre: 0, correo: 0, contrasena: 0 }
-    )
+    const resultado: ResumenCambios = {
+        nombre: 0,
+        correo: 0,
+        contrasena: 0
+    }
+
+    for (const cambio of cambios) {
+        resultado[cambio.tipo]++
+    }
+
+    return resultado
 }
